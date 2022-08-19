@@ -26,8 +26,6 @@ public class InvoiceItem extends GeneratorData{
         this.itemCount = Math.abs(Integer.parseInt(itemCount));
     }
 
-
-
     @Override
     public void addMultipleRows(Vector<GeneratorData> items) {
 
@@ -36,30 +34,6 @@ public class InvoiceItem extends GeneratorData{
     @Override
     public void addItem(InvoiceItem invoiceItem) {
 
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public double getItemPrice() {
-        return itemPrice;
-    }
-
-    public void setItemPrice(int itemPrice) {
-        this.itemPrice = itemPrice;
-    }
-
-    public int getItemCount() {
-        return itemCount;
-    }
-
-    public void setItemCount(int itemCount) {
-        this.itemCount = itemCount;
     }
 
     public double getItemTotalCost() {

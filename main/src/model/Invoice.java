@@ -19,11 +19,6 @@ public class Invoice extends GeneratorData{
         setInvoiceID(invoiceID);
     }
 
-    public Invoice(int invoiceID, String invoiceDate, String invoiceCustomerName, Vector<InvoiceItem> InvoiceItems){
-        this(invoiceID, invoiceDate, invoiceCustomerName);
-        this.invoiceItems = InvoiceItems;
-    }
-
     public Invoice(String [] invoiceData){
         this(Integer.parseInt(invoiceData[0]), invoiceData[1], invoiceData[2]);
     }
@@ -45,16 +40,8 @@ public class Invoice extends GeneratorData{
 
     }
 
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
-
     public void setInvoiceDate(String invoiceDate) {
         this.invoiceDate = invoiceDate;
-    }
-
-    public String getInvoiceCustomerName() {
-        return invoiceCustomerName;
     }
 
     public void setInvoiceCustomerName(String invoiceCustomerName) {
@@ -63,10 +50,6 @@ public class Invoice extends GeneratorData{
 
     public Vector<InvoiceItem> getInvoiceItems() {
         return invoiceItems;
-    }
-
-    public void setInvoiceItems(Vector<InvoiceItem> invoiceItems) {
-        this.invoiceItems = invoiceItems;
     }
 
     public void addItem(InvoiceItem item){

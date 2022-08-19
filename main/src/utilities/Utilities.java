@@ -34,6 +34,9 @@ public class Utilities
                 if(Integer.parseInt(data[0]) != UniqueID.getUniqueID()){
                     throw new Exception("Invalid ID at row " + Integer.toString(i + 1) + " in invoice header file");
                 }
+                if(!DateValidator.validateJavaDate(data[1])){
+                    throw new Exception("Invalid date at row " + Integer.toString(i + 1) + " in invoice header file");
+                }
                 invoices.add(new Invoice(data));
             }
             else{
