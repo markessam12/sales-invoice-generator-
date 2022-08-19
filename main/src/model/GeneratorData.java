@@ -12,7 +12,5 @@ public abstract class GeneratorData {
 
     public abstract UniqueID getInvoiceID();
 
-    public abstract void addMultipleRows(Vector<GeneratorData> items);
-
     public abstract void addItem(InvoiceItem invoiceItem);
 }

@@ -8,9 +8,8 @@ import java.awt.*;
 import java.util.Vector;
 
 public class CSVTable {
-    private JTable CSVTable;
-    private JScrollPane jsp;
-    private DefaultTableModel table_data;
+    private final JTable CSVTable;
+    private final DefaultTableModel table_data;
 
     public CSVTable(Container container, String[] cols, GridBagConstraints pos, Boolean editable)
     {
@@ -32,20 +31,14 @@ public class CSVTable {
         else{
             CSVTable = new JTable() {
                 public boolean editCellAt(int row, int column, java.util.EventObject e) {
-                    return editable;
+                    return false;
                 }
             };
         }
         CSVTable.setModel(table_data);
-        jsp = new JScrollPane(CSVTable);
+        JScrollPane jsp = new JScrollPane(CSVTable);
         jsp.setBorder(BorderFactory.createLineBorder(Color.black,1));
         container.add(jsp,pos);
-    }
-
-    public CSVTable(Container container,String[] cols, GridBagConstraints pos, Boolean editable, Vector<GeneratorData> invoicesData)
-    {
-        this(container, cols, pos, editable);
-        addMultipleRows(invoicesData);
     }
 
     public JTable getTable() {

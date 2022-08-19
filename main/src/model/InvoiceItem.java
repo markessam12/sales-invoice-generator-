@@ -27,11 +27,6 @@ public class InvoiceItem extends GeneratorData{
     }
 
     @Override
-    public void addMultipleRows(Vector<GeneratorData> items) {
-
-    }
-
-    @Override
     public void addItem(InvoiceItem invoiceItem) {
 
     }
@@ -41,7 +36,7 @@ public class InvoiceItem extends GeneratorData{
     }
 
     public Vector<Object> toVector(){
-        Vector<Object> vector = new Vector();
+        Vector<Object> vector = new Vector<>();
         vector.add(itemName);
         vector.add(itemPrice);
         vector.add(itemCount);
@@ -55,11 +50,7 @@ public class InvoiceItem extends GeneratorData{
     }
 
     public String toCSV(){
-        return new String(invoiceID.toString() + "," +
-                itemName + " ," +
-                itemPrice + "," +
-                itemCount
-        );
+        return invoiceID.toString() + "," + itemName + " ," + itemPrice + "," + itemCount;
     }
 }
 

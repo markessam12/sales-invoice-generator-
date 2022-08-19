@@ -26,10 +26,10 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
     private JLabel selectedInvoiceNumber;
     private JTextField selectedCustomerName;
     private JLabel selectedInvoiceTotal;
-    private CSVTable invoiceTable;
-    private CSVTable invoiceItemsTable;
+    private final CSVTable invoiceTable;
+    private final CSVTable invoiceItemsTable;
     private Vector<GeneratorData> invoices = new Vector<>();
-    private GridBagConstraints positionGBC = new GridBagConstraints();
+    private final GridBagConstraints positionGBC = new GridBagConstraints();
 
     private Boolean invoiceEdited = Boolean.FALSE;
     private Boolean creatingInvoice = Boolean.FALSE;
@@ -92,34 +92,35 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getActionCommand().equals(Constants.OPEN_FILE_ACTION_COMMAND)){
-            openCSV();
-        }
-        else if(e.getActionCommand().equals(Constants.CREATE_BTN_ACTION_COMMAND)){
-            addInvoice();
-        }
-        else if(e.getActionCommand().equals(Constants.DELETE_BTN_ACTION_COMMAND)){
-            deleteInvoice();
-        }
-        else if(e.getActionCommand().equals(Constants.ADD_ITEM_BTN_ACTION_COMMAND)){
-            if(invoiceTable.getTable().getSelectedRow() == -1){
-                JOptionPane.showMessageDialog(this,"No invoice selected.", "Item addition failed", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
-                invoiceItemsTable.addRow();
-            }
-        }
-        else if(e.getActionCommand().equals(Constants.REMOVE_ITEM_BTN_ACTION_COMMAND)){
-            deleteItem();
-        }
-        else if(e.getActionCommand().equals(Constants.INVOICE_DATA_EDITED_ACTION_COMMAND)){
-            invoiceEdited = true;
-        }
-        else if(e.getActionCommand().equals(Constants.SAVE_UPDATE_BTN_ACTION_COMMAND)){
-            saveChanges();
-        }
-        else if(e.getActionCommand().equals(Constants.SAVE_FILE_ACTION_COMMAND)){
-            saveCSV();
+        switch (e.getActionCommand()) {
+            case Constants.OPEN_FILE_ACTION_COMMAND:
+                openCSV();
+                break;
+            case Constants.CREATE_BTN_ACTION_COMMAND:
+                addInvoice();
+                break;
+            case Constants.DELETE_BTN_ACTION_COMMAND:
+                deleteInvoice();
+                break;
+            case Constants.ADD_ITEM_BTN_ACTION_COMMAND:
+                if (invoiceTable.getTable().getSelectedRow() == -1) {
+                    JOptionPane.showMessageDialog(this, "No invoice selected.", "Item addition failed", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    invoiceItemsTable.addRow();
+                }
+                break;
+            case Constants.REMOVE_ITEM_BTN_ACTION_COMMAND:
+                deleteItem();
+                break;
+            case Constants.INVOICE_DATA_EDITED_ACTION_COMMAND:
+                invoiceEdited = true;
+                break;
+            case Constants.SAVE_UPDATE_BTN_ACTION_COMMAND:
+                saveChanges();
+                break;
+            case Constants.SAVE_FILE_ACTION_COMMAND:
+                saveCSV();
+                break;
         }
     }
 
@@ -131,45 +132,13 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
         setInvoiceData("-","","","-");
 
         //open invoice header
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                } else {
-                    String filename = f.getName().toLowerCase();
-                    return filename.endsWith(".csv") || filename.endsWith(".txt") ;
-                }
-            }
-
-            @Override
-            public String getDescription() {
-                return "CSV Files (*.csv)";
-            }
-        });
+        JFileChooser fileChooser = browser();
         fileChooser.setDialogTitle("Open invoice header file");
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(this);
 
         //open invoice line
-        JFileChooser fileChooser2 = new JFileChooser();
-        fileChooser2.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                } else {
-                    String filename = f.getName().toLowerCase();
-                    return filename.endsWith(".csv") || filename.endsWith(".txt") ;
-                }
-            }
-
-            @Override
-            public String getDescription() {
-                return "CSV Files (*.csv)";
-            }
-        });
+        JFileChooser fileChooser2 = browser();
         fileChooser2.setDialogTitle("Open invoice line file");
         fileChooser2.setCurrentDirectory(fileChooser.getCurrentDirectory());
         int result2 = fileChooser2.showOpenDialog(this);
@@ -191,7 +160,7 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
         }
     }
 
-    private void saveCSV(){
+    private JFileChooser browser(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileFilter() {
             @Override
@@ -209,8 +178,13 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
                 return "CSV Files (*.csv)";
             }
         });
-        fileChooser.setDialogTitle("Open invoice header file");
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        return fileChooser;
+    }
+
+    private void saveCSV(){
+        JFileChooser fileChooser = browser();
+        fileChooser.setDialogTitle("Select folder to save CSV files");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false);
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -310,7 +284,7 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
             JOptionPane.showMessageDialog(this,"Complete invoice missing data", "Failed to save",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!DateValidator.validateJavaDate(selectedInvoiceDate.getText())){
+        if(DateValidator.validateJavaDate(selectedInvoiceDate.getText())){
             JOptionPane.showMessageDialog(this,"Invalid date! Please enter a valid date", "Failed to save",JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -359,13 +333,10 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
             invoiceItemsTable.clearTable();
             setInvoiceData("-","","","-");
         }
-        else{
-            return;
-        }
     }
 
     //method fired when an invoice row is selected
-    private void tableMouseClicked(java.awt.event.MouseEvent evt){
+    private void tableMouseClicked(){
         if(creatingInvoice){
             addInvoice();
             return;
@@ -399,13 +370,6 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
             invoiceItemsTable.clearTable();
         }
         invoiceEdited = false;
-    }
-
-    private void setInvoiceData(int invoiceNumber, String invoiceDate, String customerName, int invoiceTotal){
-        this.selectedInvoiceNumber.setText(Integer.toString(invoiceNumber));
-        this.selectedInvoiceDate.setText(invoiceDate);
-        this.selectedCustomerName.setText(customerName);
-        this.selectedInvoiceTotal.setText(Integer.toString(invoiceTotal));
     }
 
     private void setInvoiceData(String invoiceNumber, String invoiceDate, String customerName, String invoiceTotal){
@@ -505,7 +469,7 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        tableMouseClicked(e);
+        tableMouseClicked();
     }
 
     @Override
@@ -531,11 +495,11 @@ public class SalesInvoiceGenerator extends JFrame implements ActionListener, Mou
     //fired when items table change to calculate the new total price automatically
     @Override
     public void tableChanged(TableModelEvent e) {
-        if(e.getType() == 0){
+        if(e.getType() == TableModelEvent.UPDATE){
             dataChanged();
             int editedRow = e.getFirstRow();
-            double itemPrice = 0;
-            int count = 0;
+            double itemPrice;
+            int count;
             //check for validity of inputs in the item price and count fields
             try{
                 itemPrice = Utilities.doubleConverter(invoiceItemsTable.getModel().getValueAt(editedRow,1));

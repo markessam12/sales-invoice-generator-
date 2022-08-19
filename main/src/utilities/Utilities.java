@@ -26,16 +26,16 @@ public class Utilities
         UniqueID.resetID();
         BufferedReader br = new BufferedReader(new FileReader(csv));
         Object[] tableLines = br.lines().toArray();
-        Vector<GeneratorData> invoices = new Vector<GeneratorData>(tableLines.length);
+        Vector<GeneratorData> invoices = new Vector<>(tableLines.length);
         for (int i = 0; i < tableLines.length; i++) {
             String line = tableLines[i].toString().trim();
             String [] data = line.split(",");
             if(data.length == Constants.INVOICE_TABLE_COLS.length - 1){
                 if(Integer.parseInt(data[0]) != UniqueID.getUniqueID()){
-                    throw new Exception("Invalid ID at row " + Integer.toString(i + 1) + " in invoice header file");
+                    throw new Exception("Invalid ID at row " + i + 1 + " in invoice header file");
                 }
-                if(!DateValidator.validateJavaDate(data[1])){
-                    throw new Exception("Invalid date at row " + Integer.toString(i + 1) + " in invoice header file");
+                if(DateValidator.validateJavaDate(data[1])){
+                    throw new Exception("Invalid date at row " + i + 1 + " in invoice header file");
                 }
                 invoices.add(new Invoice(data));
             }
@@ -54,7 +54,7 @@ public class Utilities
             String [] data = line.split(",");
             if(data.length == Constants.INVOICE_ITEMS_COLS.length){
                 if(Integer.parseInt(data[0]) >= UniqueID.getUniqueID()){
-                    throw new Exception("Invalid ID at row " + Integer.toString(i + 1) + " in invoice line file");
+                    throw new Exception("Invalid ID at row " + i + 1 + " in invoice line file");
                 }
                 Invoice parentInvoice = (Invoice) invoices.get(Integer.parseInt(data[0])-1);
                 parentInvoice.addItem(new InvoiceItem(parentInvoice.getInvoiceID(),data[1],data[2],data[3]));

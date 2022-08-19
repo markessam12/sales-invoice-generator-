@@ -6,7 +6,7 @@ public class Invoice extends GeneratorData{
     private final UniqueID invoiceID;
     private String invoiceDate;
     private String invoiceCustomerName;
-    private Vector<InvoiceItem> invoiceItems = new Vector<>();
+    private final Vector<InvoiceItem> invoiceItems = new Vector<>();
 
     public Invoice(String invoiceDate, String invoiceCustomerName){
         this.invoiceDate = invoiceDate;
@@ -33,11 +33,6 @@ public class Invoice extends GeneratorData{
 
     public void updateInvoiceID(int invoiceID){
         this.invoiceID.editUniqueID(invoiceID);
-    }
-
-    @Override
-    public void addMultipleRows(Vector<GeneratorData> items) {
-
     }
 
     public void setInvoiceDate(String invoiceDate) {
@@ -71,7 +66,7 @@ public class Invoice extends GeneratorData{
     }
 
     public Vector<Object> toVector(){
-        Vector <Object> vector = new Vector();
+        Vector<Object> vector = new Vector<>();
         vector.add(invoiceID);
         vector.add(invoiceDate);
         vector.add(invoiceCustomerName);
@@ -80,9 +75,6 @@ public class Invoice extends GeneratorData{
     }
 
     public String toCSV(){
-        return new String(invoiceID.toString() + "," +
-                invoiceDate + " ," +
-                invoiceCustomerName
-        );
+        return invoiceID.toString() + "," + invoiceDate + " ," + invoiceCustomerName;
     }
 }

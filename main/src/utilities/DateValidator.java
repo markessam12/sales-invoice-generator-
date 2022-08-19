@@ -8,30 +8,23 @@ public class DateValidator{
     public static boolean validateJavaDate(String strDate)
     {
         // Checking if date is 'null'
-        if (strDate.trim().equals(""))
-        {
-            return true;
-        }
-        else
-        {
+        if (!strDate.trim().equals("")) {
             //Date format used in example files
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             dateFormat.setLenient(false);
-            try
-            {
+            try {
                 Date testedDate = dateFormat.parse(strDate);
                 Date date = new Date();
-                if(date.before(testedDate)){
-                    return false;
+                if (date.before(testedDate)) {
+                    return true;
                 }
             }
             // Date format is invalid
-            catch (ParseException e)
-            {
-                return false;
+            catch (ParseException e) {
+                return true;
             }
             // Return true if date format is valid
-            return true;
         }
+        return false;
     }
 }
